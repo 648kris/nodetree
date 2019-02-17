@@ -28,10 +28,33 @@ const styles = theme => ({
 });
 
 class YourNodes extends React.Component {
+
+  componentWillReceiveProps(nextProps) {
+     if (nextProps.auth !== this.props.auth) {
+       let a = nextProps.auth;
+       console.log(a)
+        this.props.fetchUserNodes(a)
+       this.setState({
+         yourNodeDis: "block",
+         currentUser: nextProps.auth
+        });
+        this.props.fetchUserNodes(nextProps.auth);
+      }
+    if (nextProps.usernodes !== this.props.usernodes) {
+      this.setState({
+        userNodes: nextProps.usernodes
+       });
+      }
+    if (nextProps.allnodes !== this.props.allnodes) {
+      this.setState({
+        allNodes: nextProps.allnodes
+        });
+      }
+   }
+
   state = {
+    userNodes: [{name:'placeholder', _id:'000', leaves:[1,2,3]},],
    };
-
-
 
   render() {
 
@@ -40,9 +63,9 @@ class YourNodes extends React.Component {
       {name:'jacob', _id:'001', leaves:[1,2,3]}
     ];
 
-    if(this.props.allnodes){
-      stations = this.props.allnodes
-    }
+
+
+    console.log(this.props)
 
     return (
       <Drawer
@@ -54,7 +77,7 @@ class YourNodes extends React.Component {
       Your Factories
     </h3>
       <NewNodeDialog/>
-        {stations.map( (station, index) => (
+        {this.state.userNodes.map( (station, index) => (
           <div className="station" key={station._id} style={{borderBottom:"solid 1px #e0e0e0"}}>
           <List>
             <ListItem>
@@ -65,7 +88,7 @@ class YourNodes extends React.Component {
             <div style={{float:"left", paddingLeft:"50px"}}>
               <ChangeNameDialog id={station._id}/>
             </div>
-            <div style={{float:"left", paddingRight:"50px"}}>
+            <div style={{float:"left", paddingRight:"50px"}} onClick={this.props.select("test")}>
               <DeleteDialog id={station._id}/>
             </div>
           </List>
@@ -80,7 +103,7 @@ class YourNodes extends React.Component {
 
 
 function mapStateToProps(state) {
-  return {auth: state.auth, allnodes: state.allnodes}
+  return {auth: state.auth, allnodes: state.allnodes, usernodes: state.usernodes}
 }
 
 

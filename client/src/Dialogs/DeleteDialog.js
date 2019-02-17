@@ -35,7 +35,7 @@ class FormDialog extends React.Component {
           <DialogTitle id="form-dialog-title">Delete Factory</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Are you sure you want to delete the selected factory?
+              Delete the selected factory?
             </DialogContentText>
 
           </DialogContent>

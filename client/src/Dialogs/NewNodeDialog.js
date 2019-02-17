@@ -57,12 +57,17 @@ class FormDialog extends React.Component {
     })
   }
 
-  handleSubmit = (e) => {
+  updateAfterNew = () => {
     let auth = this.props.auth
-    this.setState({ open: false });
-    this.props.createNewNode(this.state.name, this.state.amount, this.state.low, this.state.high, this.props.auth)
     this.props.fetchAllNodes()
     this.props.fetchUserNodes(auth);
+  }
+
+  handleSubmit = (e) => {
+    this.setState({ open: false });
+    this.props.createNewNode(this.state.name, this.state.amount, this.state.low, this.state.high, this.props.auth)
+    setTimeout(this.updateAfterNew, 500); 
+    console.log(this.props)
   }
 
   render() {

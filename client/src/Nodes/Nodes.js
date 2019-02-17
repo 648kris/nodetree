@@ -57,6 +57,8 @@ class NestedList extends React.Component {
       stations = this.props.allnodes
     }
 
+    console.log(this.props)
+
     return (
       <div>
         {stations.map( (station, index) => (
@@ -83,7 +85,7 @@ class NestedList extends React.Component {
 
 
 function mapStateToProps(state) {
-  return {auth: state.auth, allnodes: state.allnodes}
+  return {auth: state.auth, allnodes: state.allnodes, usernodes:state.usernodes}
 }
 
 

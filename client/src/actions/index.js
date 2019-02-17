@@ -7,6 +7,7 @@ import { FETCH_USER_NODES } from './types';
 import { NEW_NODE} from './types';
 import { CHANGE_NODE_NAME } from './types';
 import { DELETE_NODE } from './types';
+import { SELECT } from './types';
 
 export const fetchUser = () => {
   return function(dispatch) {
@@ -17,7 +18,7 @@ export const fetchUser = () => {
 };
 
 export const fetchAllNodes = () => {
-  console.log("fetchsALLnodes action")
+  //console.log("fetchsALLnodes action")
   return function(dispatch) {
     axios
       .get(path() + '/api/allnodes',  {withCredentials: true})
@@ -26,7 +27,7 @@ export const fetchAllNodes = () => {
 };
 
 export const fetchUserNodes = (currentuser) => {
-  console.log("fetchsuernodes action")
+  //console.log("fetchsuernodes action")
   return function(dispatch) {
     axios
       .get(path() + '/api/usernodes',{ params:{user: currentuser}}, {withCredentials: true},)
@@ -42,6 +43,16 @@ export const deleteNode = (currentuser, nodeid) => {
   }
 };
 
+export const select = (id) => {
+  //console.log("actions select "+id)
+  return function(dispatch) {
+    dispatch({type: SELECT, payload: id})
+  }
+};
+
+
+
+
 export const changeNodeName = (currentuser, nodeid, name) => {
   return function(dispatch) {
     axios
@@ -52,12 +63,6 @@ export const changeNodeName = (currentuser, nodeid, name) => {
 
 //export const createNewNode = (name, amount, rangeLow, rangeHigh, currentuser)
 export const createNewNode = (name, amount, rangeLow, rangeHigh, currentuser) => {
-  console.log("createNewNode ACTION")
-  console.log("name = "+name)
-  console.log("amount = "+amount)
-  console.log("rangeLow = "+rangeLow)
-  console.log("rangeHigh = "+rangeHigh)
-  console.log("currentuser = "+currentuser)
 
   if (rangeLow < 1){rangeLow = 1}
   if (rangeHigh > 9000000000000000000000000000000000000000){rangeHigh = 9000000000000000000000000000000000000000}
@@ -67,7 +72,8 @@ export const createNewNode = (name, amount, rangeLow, rangeHigh, currentuser) =>
   let leaves = [];
   for(let i=0;i<amount;i++){
     let x = Math.random() * (rangeHigh - rangeLow) + rangeLow;
-    leaves.push(x)
+    let y = Math.round(x)
+    leaves.push(y)
   }
   return function(dispatch) {
     axios
