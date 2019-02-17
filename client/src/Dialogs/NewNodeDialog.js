@@ -68,9 +68,11 @@ class FormDialog extends React.Component {
   render() {
     return (
       <div>
-        <Button color="primary" onClick={this.handleClickOpen}>
-          Create New Factory
-        </Button>
+        <div style={{textAlign:"center"}}>
+          <Button color="primary" onClick={this.handleClickOpen}>
+            Create New Factory
+          </Button>
+        </div>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

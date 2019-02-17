@@ -1,99 +1,88 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+import ChildNodes from '../Nodes/ChildNodes';
+import NewNodeDialog from '../Dialogs/NewNodeDialog';
+import ChangeNameDialog from '../Dialogs/ChangeNameDialog';
+import DeleteDialog from '../Dialogs/DeleteDialog';
+import Drawer from '@material-ui/core/Drawer';
+import Divider from '@material-ui/core/Divider';
 import treeIcon from '../icons/treeSmall.png';
-import Button from '@material-ui/core/Button';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
-const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-  },
-  appBar: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginRight: drawerWidth,
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  toolbar: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
   },
 });
 
-function PermanentDrawerRight(props) {
-  const { classes } = props;
-  let factories = [
-    {name:'kristen', _id:'000', leaves:[1,2,3]},
-    {name:'jacob', _id:'001', leaves:[1,2,3]}
-  ];
-
-  if(props.usernodes){
-    factories = props.usernodes
-  }
-
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+class YourNodes extends React.Component {
+  state = {
+   };
 
 
-      </main>
+
+  render() {
+
+    let stations = [
+      {name:'kristen', _id:'000', leaves:[1,2,3]},
+      {name:'jacob', _id:'001', leaves:[1,2,3]}
+    ];
+
+    if(this.props.allnodes){
+      stations = this.props.allnodes
+    }
+
+    return (
       <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        anchor="right"
-      >
-        <div className={classes.toolbar} />
-        <Divider />
-        <List>
-          <div style={{fontFamily:"roboto", textAlign:"center"}}>
-            <h3>
-              You Factories
-            </h3>
-            <Button color="primary" className={classes.button}>
-              Create New Factory
-            </Button>
-            </div>
-          {factories.map((factory, index) => (
-            <div>
-            <ListItem button key={factory._id}>
-              <ListItemIcon><img src={treeIcon} /></ListItemIcon>
-              <ListItemText primary={factory.name} />
+       variant="permanent"
+       anchor="right"
+     >
+     <br/><br/><br/><br/><Divider/>
+    <h3 style={{textAlign:"center", fontFamily:"roboto"}}>
+      Your Factories
+    </h3>
+      <NewNodeDialog/>
+        {stations.map( (station, index) => (
+          <div className="station" key={station._id} style={{borderBottom:"solid 1px #e0e0e0"}}>
+          <List>
+            <ListItem>
+            <ListItemIcon><img src={treeIcon}></img></ListItemIcon>
+            <ListItemText primary={station.name} />
             </ListItem>
-            <Divider />
+
+            <div style={{float:"left", paddingLeft:"50px"}}>
+              <ChangeNameDialog id={station._id}/>
             </div>
-          ))}
-        </List>
+            <div style={{float:"left", paddingRight:"50px"}}>
+              <DeleteDialog id={station._id}/>
+            </div>
+          </List>
+          </div>
+        ))}
       </Drawer>
-    </div>
-  );
+
+
+    );
+  }
 }
 
-PermanentDrawerRight.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(PermanentDrawerRight);
+function mapStateToProps(state) {
+  return {auth: state.auth, allnodes: state.allnodes}
+}
+
+
+
+export default connect(mapStateToProps, actions)(YourNodes);
