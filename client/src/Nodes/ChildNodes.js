@@ -6,7 +6,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
 function Leaves(props) {
-  console.log(props)
 
   let children = props.children.split(",")
 

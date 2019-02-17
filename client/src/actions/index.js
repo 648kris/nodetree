@@ -17,6 +17,7 @@ export const fetchUser = () => {
 };
 
 export const fetchAllNodes = () => {
+  console.log("fetchsALLnodes action")
   return function(dispatch) {
     axios
       .get(path() + '/api/allnodes',  {withCredentials: true})
@@ -25,6 +26,7 @@ export const fetchAllNodes = () => {
 };
 
 export const fetchUserNodes = (currentuser) => {
+  console.log("fetchsuernodes action")
   return function(dispatch) {
     axios
       .get(path() + '/api/usernodes',{ params:{user: currentuser}}, {withCredentials: true},)
@@ -61,6 +63,7 @@ export const createNewNode = (name, amount, rangeLow, rangeHigh, currentuser) =>
   if (rangeHigh > 9000000000000000000000000000000000000000){rangeHigh = 9000000000000000000000000000000000000000}
   if (amount < 1){amount = 1}
   if (amount > 15){amount = 15}
+  if(rangeLow > rangeHigh){rangeHigh = rangeLow+1}
   let leaves = [];
   for(let i=0;i<amount;i++){
     let x = Math.random() * (rangeHigh - rangeLow) + rangeLow;

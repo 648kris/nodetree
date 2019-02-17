@@ -14,6 +14,12 @@ import YourNodes from '../YourNodes/YourNodes';
 
 
 class NestedList extends React.Component {
+  componentDidMount(){
+    this.props.fetchAllNodes();
+    if(this.props.auth){
+      console.log("auth exists in landing componentDidMount")
+    }
+    }
 
   constructor(props){
     super(props);
@@ -28,9 +34,12 @@ class NestedList extends React.Component {
 
 componentWillReceiveProps(nextProps) {
    if (nextProps.auth !== this.props.auth) {
+     let a = nextProps.auth;
+     console.log(a)
+      this.props.fetchUserNodes(a)
      this.setState({
        yourNodeDis: "block",
-       currentUser: nextProps.auth,
+       currentUser: nextProps.auth
       });
       this.props.fetchUserNodes(nextProps.auth);
     }
@@ -49,12 +58,10 @@ componentWillReceiveProps(nextProps) {
  }
 
   handleClick = (e) => {
-    console.log(e.type)
     this.setState(state => ({ open: !state.open }));
   };
 
   handleRightClick = (e) => {
-    console.log(e.type)
     this.setState(state => ({ open: !state.open }));
   };
 

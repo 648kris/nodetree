@@ -83,8 +83,6 @@ class NestedList extends React.Component {
 
 
 function mapStateToProps(state) {
-  console.log("state from NODESs")
-  console.log(state)
   return {auth: state.auth, allnodes: state.allnodes}
 }
 

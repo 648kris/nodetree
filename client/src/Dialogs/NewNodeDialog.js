@@ -12,18 +12,60 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 class FormDialog extends React.Component {
   state = {
     open: false,
+
   };
 
   handleClickOpen = () => {
-    this.setState({ open: true });
+    this.setState({
+      open: true,
+      name: null,
+      amount: null,
+      low: null,
+      high: null,
+      currentuser:null });
   };
 
   handleClose = () => {
     this.setState({ open: false });
   };
 
+  handleNameChange = (e) => {
+    let n = e.target.value
+    this.setState({
+      name: n
+    })
+  }
+
+  handleAmountChange = (e) => {
+    let n = e.target.value
+    this.setState({
+      amount: n
+    })
+  }
+
+  handleLowChange = (e) => {
+    let n = e.target.value
+    this.setState({
+      low: n
+    })
+  }
+
+  handleHighChange = (e) => {
+    let n = e.target.value
+    this.setState({
+      high: n
+    })
+  }
+
+  handleSubmit = (e) => {
+    let auth = this.props.auth
+    this.setState({ open: false });
+    this.props.createNewNode(this.state.name, this.state.amount, this.state.low, this.state.high, this.props.auth)
+    this.props.fetchAllNodes()
+    this.props.fetchUserNodes(auth);
+  }
+
   render() {
-    console.log(this.props)
     return (
       <div>
         <Button color="primary" onClick={this.handleClickOpen}>
@@ -45,6 +87,7 @@ class FormDialog extends React.Component {
               id="name"
               label="Name of New Node"
               fullWidth
+              onChange={this.handleNameChange}
             />
             <TextField
               autoFocus
@@ -52,6 +95,7 @@ class FormDialog extends React.Component {
               id="name"
               label="Number of Factories - up to 15"
               fullWidth
+              onChange={this.handleAmountChange}
             />
             <TextField
               autoFocus
@@ -59,6 +103,7 @@ class FormDialog extends React.Component {
               id="name"
               label="Lowest Number in Range"
               fullWidth
+              onChange={this.handleLowChange}
             />
             <TextField
               autoFocus
@@ -66,13 +111,15 @@ class FormDialog extends React.Component {
               id="name"
               label="Highest Number in Range"
               fullWidth
+              onChange={this.handleHighChange}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose}>
               Cancel
             </Button>
-            <Button onClick={this.props.createNewNode("name", 5, 1, 111, this.props.auth)} color="primary">
+            <Button color="primary"
+            onClick={this.handleSubmit}>
               Create
             </Button>
           </DialogActions>
@@ -83,7 +130,6 @@ class FormDialog extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {auth: state.auth}
 }
 

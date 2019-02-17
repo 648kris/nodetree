@@ -9,6 +9,7 @@ class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
     this.props.fetchAllNodes();
+    this.props.fetchUserNodes();
   }
   render() {
     return (
