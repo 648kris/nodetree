@@ -1,6 +1,5 @@
 import axios from 'axios';
 import path from '../path';
-//import currentUserFuntion from './currentUserFunction';
 import { FETCH_USER } from './types';
 import { FETCH_ALL_NODES } from './types';
 import { FETCH_USER_NODES } from './types';
@@ -33,7 +32,6 @@ export const fetchUserNodes = (currentuser) => {
 };
 
 export const deleteNode = (nodeid) => {
-  console.log("deletenode action")
   return function(dispatch) {
     axios
       .post(path() + '/api/delete',  {}, {params:{nodeid: nodeid}, withCredentials: true})
@@ -42,8 +40,6 @@ export const deleteNode = (nodeid) => {
 };
 
 export const changeNodeName = (nodeid, name) => {
-  console.log("changenodename action")
-  console.log(name)
   return function(dispatch) {
     axios
       .post(path() + '/api/updatename',  {}, {params:{nodeid: nodeid, name: name}, withCredentials: true})
@@ -52,6 +48,9 @@ export const changeNodeName = (nodeid, name) => {
 };
 
 export const createNewNode = (name, amount, rangeLow, rangeHigh, currentuser) => {
+  if ( isNaN(parseInt(rangeLow)) ){rangeLow = 1}
+  if ( isNaN(parseInt(rangeHigh)) ){rangeHigh = 100}
+  if ( isNaN(parseInt(amount)) ){amount = 5}
 
   if (rangeLow < 1){rangeLow = 1}
   if ( rangeHigh > Math.pow(10,30) ){Math.pow(10,30)}

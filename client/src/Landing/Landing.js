@@ -14,35 +14,27 @@ import YourNodes from '../YourNodes/YourNodes';
 
 
 class NestedList extends React.Component {
-  componentDidMount(){
-    this.props.fetchAllNodes();
-    if(this.props.auth){
-      console.log("auth exists in landing componentDidMount")
-    }
-    }
 
-  constructor(props){
-    super(props);
-    this.state = {
+    state = {
       open: false,
-      yourNodeDis: "none",
+      yourNodesDisplay: "none",
       currentUser: null,
       userNodes: ["Your factories will be shown here"],
       allNodes: ["loading..."]
   };
-}
 
 componentWillReceiveProps(nextProps) {
    if (nextProps.auth !== this.props.auth) {
+     if(nextProps.auth){
      let a = nextProps.auth;
-     console.log(a)
       this.props.fetchUserNodes(a)
      this.setState({
-       yourNodeDis: "block",
+       yourNodesDisplay: "block",
        currentUser: nextProps.auth
       });
       this.props.fetchUserNodes(nextProps.auth);
     }
+  }
   if (nextProps.usernodes !== this.props.usernodes) {
     this.setState({
       userNodes: nextProps.usernodes
@@ -53,8 +45,6 @@ componentWillReceiveProps(nextProps) {
       allNodes: nextProps.allnodes
       });
     }
-
-
  }
 
   handleClick = (e) => {
@@ -70,39 +60,32 @@ componentWillReceiveProps(nextProps) {
     return (
       <div>
       <Appbar/>
-
       <div style={{width:"50%"}}>
       <List
         component="nav"
         subheader={<ListSubheader component="div">user generated factories</ListSubheader>}
       >
-
         <ListItem button onClick={this.handleClick} onContextMenu={this.handleRightClick}>
-
           <ListItemText inset>
             <p style={{color:"#1769aa"}}> Root </p>
            </ListItemText>
-
           {this.state.open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={this.state.open} timeout="auto" unmountOnExit>
           <Nodes/>
         </Collapse>
       </List>
-      <div style={{display:this.state.yourNodeDis}}> <YourNodes user={this.state.currentUser} usernodes={this.state.userNodes}/> </div>
+      <div style={{display:this.state.yourNodesDisplay}}> <YourNodes user={this.state.currentUser} usernodes={this.state.userNodes}/> </div>
       </div>
       </div>
     );
   }
 }
 
-
 function mapStateToProps(state) {
   return {auth: state.auth,
     usernodes: state.usernodes,
     allnodes: state.allnodes}
 }
-
-
 
 export default connect(mapStateToProps, actions)(NestedList);

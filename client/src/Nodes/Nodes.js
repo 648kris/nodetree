@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -11,17 +9,6 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import ChildNodes from './ChildNodes'
 
-
-const styles = theme => ({
-  root: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
-  nested: {
-    paddingLeft: theme.spacing.unit * 4,
-  },
-});
 
 class NestedList extends React.Component {
   state = {
@@ -35,7 +22,8 @@ class NestedList extends React.Component {
 
      if (currentIndex === -1) {
        newChecked.push(value);
-     } else {
+     }
+     else {
        newChecked.splice(currentIndex, 1);
      }
 
@@ -43,7 +31,6 @@ class NestedList extends React.Component {
        checked: newChecked,
      });
    };
-
 
 
   render() {
@@ -56,8 +43,6 @@ class NestedList extends React.Component {
     if(this.props.allnodes){
       stations = this.props.allnodes
     }
-
-    console.log(this.props)
 
     return (
       <div>
@@ -83,13 +68,8 @@ class NestedList extends React.Component {
   }
 }
 
-
 function mapStateToProps(state) {
   return {auth: state.auth, allnodes: state.allnodes, usernodes:state.usernodes}
 }
 
-
-
 export default connect(mapStateToProps, actions)(NestedList);
-
-//export default withStyles(styles)(NestedList);

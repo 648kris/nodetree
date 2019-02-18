@@ -1,18 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import ChildNodes from '../Nodes/ChildNodes';
 import NewNodeDialog from '../Dialogs/NewNodeDialog';
-import ChangeNameDialog from '../Dialogs/ChangeNameDialog';
-import DeleteDialog from '../Dialogs/DeleteDialog';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import treeIcon from '../icons/treeSmall.png';
@@ -25,14 +17,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-
-const styles = theme => ({
-  root: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
-});
 
 class YourNodes extends React.Component {
 
@@ -50,8 +34,17 @@ class YourNodes extends React.Component {
       this.setState({
         userNodes: nextProps.usernodes
        });
-      }
-
+       if (nextProps.usernodes.length > 0){
+         this.setState({
+           noFactoryDisplay:"none"
+          });
+       }
+       if (nextProps.usernodes.length === 0){
+         this.setState({
+           noFactoryDisplay:"block"
+          });
+       }
+    }
     if (nextProps.allnodes !== this.props.allnodes) {
       this.setState({
         allNodes: nextProps.allnodes
@@ -60,27 +53,27 @@ class YourNodes extends React.Component {
    }
 
   state = {
-    userNodes: [{name:'placeholder', _id:'000', leaves:[1,2,3]},],
+    userNodes: [{name:'', _id:'000', leaves:[]}],
     selected: "",
     currentUser: "",
     deleteOpen: false,
     changeNameOpen: false,
     cursor: "contextMenu",
-    name:""
+    name:"",
+    noFactoryDisplay:"block"
    };
 
-   handleSelect = (e) => {
-     this.setState({selected: e.target.id})
-   }
+  handleSelect = (e) => {
+    this.setState({selected: e.target.id})
+  }
 
-   handleClickChangeNameOpen = (e) => {
-     this.setState({ changeNameOpen: true, selected: e.target.id });
-   };
+  handleClickChangeNameOpen = (e) => {
+    this.setState({ changeNameOpen: true, selected: e.target.id });
+  };
 
-   handleChangeNameClose = () => {
-     this.setState({ changeNameOpen: false });
-   };
-
+ handleChangeNameClose = () => {
+    this.setState({ changeNameOpen: false });
+  };
 
  handleClickDeleteOpen = (e) => {
    this.setState({ deleteOpen: true, selected: e.target.id });
@@ -107,20 +100,14 @@ class YourNodes extends React.Component {
  }
 
  handleDelete = () => {
-   console.log("delete")
    let nodeid = this.state.selected
-   console.log(nodeid)
    this.props.deleteNode(nodeid)
    setTimeout(this.updateAfterNew, 500);
  };
 
  handleNameChangeSubmit = () => {
-   console.log("change name submit")
    let nodeid = this.state.selected;
    let name = this.state.name;
-   console.log(nodeid)
-   console.log(name)
-   console.log(this.props)
    this.props.changeNodeName(nodeid, name)
    setTimeout(this.updateAfterNew, 500);
  };
@@ -128,7 +115,6 @@ class YourNodes extends React.Component {
  handleChangeNameMouseOver = () => {
    this.setState({ changeNameBG: "#e0e0e0", cursor: "pointer"});
  };
-
 
  handleNameChange = (e) => {
    let n = e.target.value
@@ -139,27 +125,28 @@ class YourNodes extends React.Component {
 
   render() {
 
-    let stations = [
-      {name:'kristen', _id:'000', leaves:[1,2,3]},
-      {name:'jacob', _id:'001', leaves:[1,2,3]}
-    ];
-
-
     return (
       <Drawer
        variant="permanent"
        anchor="right"
-     >
+       >
+
      <br/><br/><br/><br/><Divider/>
     <h3 style={{textAlign:"center", fontFamily:"roboto"}}>
       Your Factories
     </h3>
+
+    <p style={{width:"240px", color:"#90a4ae", fontFamily:"Roboto", textAlign:"center", display: this.state.noFactoryDisplay}}>
+      This will be your factory editing menu.<br/><br/>
+      You will be able to view your factories with their children in the "Root" dropdown.<br/><br/>
+      You can already see everyone else's factories by clicking "Root".<br/>
+    </p>
       <NewNodeDialog/>
         {this.state.userNodes.map( (station, index) => (
           <div className="station" key={station._id} style={{borderBottom:"solid 1px #e0e0e0"}}>
           <List>
             <ListItem>
-            <ListItemIcon><img src={treeIcon}></img></ListItemIcon>
+            <ListItemIcon><img src={treeIcon} alt="icon"></img></ListItemIcon>
             <ListItemText primary={station.name} />
             </ListItem>
 
@@ -181,7 +168,6 @@ class YourNodes extends React.Component {
             </div>
           </List>
 
-
           <div>
             <Dialog
               open={this.state.deleteOpen}
@@ -193,7 +179,6 @@ class YourNodes extends React.Component {
                 <DialogContentText>
                   Delete the selected factory?
                 </DialogContentText>
-
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.handleDeleteClose}>
@@ -208,7 +193,6 @@ class YourNodes extends React.Component {
 
 
           <div>
-
             <Dialog
               open={this.state.changeNameOpen}
               onClose={this.handleChangeNameClose}
@@ -242,17 +226,12 @@ class YourNodes extends React.Component {
           </div>
         ))}
       </Drawer>
-
-
     );
   }
 }
 
-
 function mapStateToProps(state) {
   return {auth: state.auth, allnodes: state.allnodes, usernodes: state.usernodes}
 }
-
-
 
 export default connect(mapStateToProps, actions)(YourNodes);

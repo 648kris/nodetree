@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,7 +17,6 @@ const styles = {
   }
 };
 
-
 class ButtonAppBar extends Component {
 
   state={
@@ -29,7 +26,6 @@ class ButtonAppBar extends Component {
 
   componentWillReceiveProps(nextProps) {
      if (nextProps.auth !== this.props.auth) {
-       console.log(this.props.auth)
        if(nextProps.auth){
        this.setState({
          logoutDisplay: "block",
@@ -45,9 +41,7 @@ class ButtonAppBar extends Component {
     }
   }
 
-
 render(){
-  console.log(this.props.auth)
   return (
     <div style={styles.root}>
       <AppBar position="static">

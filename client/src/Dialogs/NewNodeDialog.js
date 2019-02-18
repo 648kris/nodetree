@@ -67,7 +67,6 @@ class FormDialog extends React.Component {
     this.setState({ open: false });
     this.props.createNewNode(this.state.name, this.state.amount, this.state.low, this.state.high, this.props.auth)
     setTimeout(this.updateAfterNew, 500); 
-    console.log(this.props)
   }
 
   render() {
