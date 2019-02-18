@@ -4,19 +4,20 @@ const Branch = mongoose.model('branch');
 
 module.exports = (app) => {
   app.post('/api/updatename', (req, res) => {
-    const user = req.query.user;
+    console.log("/api/updatename")
     const name = req.query.name;
     const id = req.query.nodeid;
+    console.log(name)
 
 
       Branch.findOneAndUpdate(
         {_id: id},
         { $set: {name: name} },
-        {new: true}, (err, updatedBranch) => {
+        {new: true}, (err, data) => {
           if(err){res.send(err)}
-          res.sendStatus(200)
+          res.send(data)
         })
-  
+
 
   })
 }

@@ -64,10 +64,12 @@ export const selected = (user) => {
 };
 
 
-export const changeNodeName = (currentuser, nodeid, name) => {
+export const changeNodeName = (nodeid, name) => {
+  console.log("changenodename action")
+  console.log(name)
   return function(dispatch) {
     axios
-      .post(path() + '/api/updatename',  {withCredentials: true}, {user: currentuser, nodeid: nodeid, name: name})
+      .post(path() + '/api/updatename',  {withCredentials: true}, {params:{nodeid: nodeid, name: name}})
       .then(res => dispatch({type: CHANGE_NODE_NAME, payload: res.data}))
   }
 };

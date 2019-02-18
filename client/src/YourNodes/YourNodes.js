@@ -70,10 +70,7 @@ class YourNodes extends React.Component {
     currentUser: "",
     deleteOpen: false,
     changeNameOpen: false,
-    deleteBG: "white",
-    changeNameBG: "white",
-    changeNameCursor: "contextMenu",
-    deleteCursor: "contextMenu",
+    cursor: "contextMenu",
     name:""
    };
 
@@ -98,19 +95,20 @@ class YourNodes extends React.Component {
    this.setState({ deleteOpen: false });
  };
 
- handleDeleteMouseOver = () => {
-   this.setState({ deleteBG: "#e0e0e0" });
+ handleMouseOver = () => {
+   this.setState({ cursor: "pointer" });
  };
 
- handleDeleteMouseOut = () => {
-   this.setState({ deleteBG: "white" });
+ handleMouseOut = () => {
+   this.setState({ cursor: "contextMenu" });
  };
 
  updateAfterNew = () => {
    let auth = this.props.auth
-   this.props.fetchAllNodes()
+   this.props.fetchAllNodes();
    this.props.fetchUserNodes(auth);
-   this.handleDeleteClose()
+   this.handleDeleteClose();
+   this.handleChangeNameClose();
  }
 
  handleDelete = () => {
@@ -121,18 +119,26 @@ class YourNodes extends React.Component {
    setTimeout(this.updateAfterNew, 500);
  };
 
- handleChangeNameMouseOver = () => {
-   this.setState({ changeNameBG: "#e0e0e0", changeNameCursor: "pointer"});
+ handleNameChangeSubmit = () => {
+   console.log("change name submit")
+   let nodeid = this.state.selected;
+   let name = this.state.name;
+   console.log(nodeid)
+   console.log(name)
+   console.log(this.props)
+   this.props.changeNodeName(nodeid, name)
+   setTimeout(this.updateAfterNew, 500);
  };
 
- handleChangeNameMouseOut = () => {
-   this.setState({ changeNameBG: "white",  deleteCursor: "pointer"});
+ handleChangeNameMouseOver = () => {
+   this.setState({ changeNameBG: "#e0e0e0", cursor: "pointer"});
  };
+
 
  handleNameChange = (e) => {
    let n = e.target.value
    this.setState({
-     name: "n"
+     name: n
    })
  }
 
@@ -163,18 +169,18 @@ class YourNodes extends React.Component {
             </ListItem>
 
             <div style={{float:"left", paddingLeft:"50px", padding:"10px"}}>
-            <button onClick={this.handleSelect} style={{border: "none", backgroundColor: this.state.changeNameBG, fontWeight:"bold", fontFamily:"Roboto",
-              padding:"7px", cursor: this.state.changeNameCursor }}
+            <button onClick={this.handleSelect} style={{border: "none", backgroundColor: "white", fontWeight:"bold", fontFamily:"Roboto",
+              padding:"7px", cursor: this.state.cursor }}
               id={station._id} onClick={this.handleClickChangeNameOpen}
-              onMouseOver={this.handleChangeNameMouseOver} onMouseOut={this.handleChangeNameMouseOut}>
+              onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
               CHANGE NAME
             </button>
             </div>
             <div style={{float:"left", paddingRight:"50px", padding:"10px"}}>
-            <button onClick={this.handleSelect} style={{border: "none", backgroundColor: this.state.deleteBG, fontWeight:"bold", fontFamily:"Roboto",
-              color:"red", padding:"7px", cursor: this.state.deleteCursor }}
+            <button onClick={this.handleSelect} style={{border: "none", backgroundColor: "white", fontWeight:"bold", fontFamily:"Roboto",
+              color:"red", padding:"7px", cursor: this.state.cursor }}
               id={station._id} onClick={this.handleClickDeleteOpen}
-              onMouseOver={this.handleDeleteMouseOver} onMouseOut={this.handleDeleteMouseOut}>
+              onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
               DELETE
             </button>
             </div>
@@ -232,15 +238,12 @@ class YourNodes extends React.Component {
                 <Button onClick={this.handleChangeNameClose}>
                   Cancel
                 </Button>
-                <Button onClick={this.handleChangeNameClose} color="primary">
+                <Button onClick={this.handleNameChangeSubmit} color="primary">
                   Change Name
                 </Button>
               </DialogActions>
             </Dialog>
           </div>
-
-
-
           </div>
         ))}
       </Drawer>
