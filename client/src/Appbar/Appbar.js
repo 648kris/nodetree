@@ -9,9 +9,6 @@ import path from '../path.js'
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
-let logoutDisplay: "none";
-let loginDisplay: "none";
-
 const styles = {
   root: {
     flexGrow: 1,
@@ -19,24 +16,38 @@ const styles = {
   },
   grow: {
     flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
+  }
 };
-
-function authCheck(a) {
-    if(a){logoutDisplay = "block"; loginDisplay = "none"}
-    else{ logoutDisplay= "none"; loginDisplay = "block"}
-}
-
-function test(){ return "none"}
 
 
 class ButtonAppBar extends Component {
+
+  state={
+    logoutDisplay: "none",
+    loginDisplay: "none"
+  }
+
+  componentWillReceiveProps(nextProps) {
+     if (nextProps.auth !== this.props.auth) {
+       console.log(this.props.auth)
+       if(nextProps.auth){
+       this.setState({
+         logoutDisplay: "block",
+         loginDisplay: "none"
+        });
+      }
+      if(nextProps.auth === false){
+      this.setState({
+        logoutDisplay: "none",
+        loginDisplay: "block"
+       });
+     }
+    }
+  }
+
+
 render(){
-  authCheck(this.props.auth)
+  console.log(this.props.auth)
   return (
     <div style={styles.root}>
       <AppBar position="static">
@@ -46,12 +57,12 @@ render(){
             Kristen's App for Passport
           </Typography>
           <Button color="inherit">
-            <a href={path() + "/auth/google"} style={{color: "white", textDecoration: test(), display: loginDisplay }}> Login with Google </a>
+            <a href={path() + "/auth/google"} style={{color: "white", textDecoration: "none", display: this.state.loginDisplay }}> Login with Google </a>
           </Button>
           <Button color="inherit">
-            <a href={path() + "/api/logout"} style={{color: "white", textDecoration: "none", display: logoutDisplay }}> Logout </a>
+            <a href={path() + "/api/logout"} style={{color: "white", textDecoration: "none", display: this.state.logoutDisplay }}> Logout </a>
           </Button>
-          <p style={{paddingRight:"300px"}}></p>
+          <p style={{paddingRight:"250px"}}></p>
         </Toolbar>
       </AppBar>
     </div>

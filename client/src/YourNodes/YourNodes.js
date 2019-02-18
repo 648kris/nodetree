@@ -40,7 +40,6 @@ class YourNodes extends React.Component {
      if (nextProps.auth !== this.props.auth) {
        let a = nextProps.auth;
         this.props.fetchUserNodes(a)
-        this.props.selected(a);
        this.setState({
          yourNodeDis: "block",
          currentUser: nextProps.auth
@@ -52,11 +51,7 @@ class YourNodes extends React.Component {
         userNodes: nextProps.usernodes
        });
       }
-      if (nextProps.selected !== this.props.selected) {
-        this.setState({
-          selected: nextProps.selected
-         });
-        }
+
     if (nextProps.allnodes !== this.props.allnodes) {
       this.setState({
         allNodes: nextProps.allnodes

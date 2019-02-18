@@ -9,7 +9,10 @@ const passportConfig = require('./services/passport');
 var mongodb = require('mongodb');
 var Db = require('mongodb').Db;
 var MongoClient = require('mongodb').MongoClient;
-var cors = require('cors')
+var cors = require('cors');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('express-session');
 
 const app = express();
 
@@ -19,11 +22,13 @@ var corsOptions = {
   optionsSuccessStatus: 200,
   allowedHeaders: 'Content-Type,Authorization',
   credentials: true,
+  methods: 'GET,PUT,POST,OPTIONS'
 }
 app.use(cors(corsOptions))
 
 
 app.use(cookieSession({
+  name: 'session',
   maxAge: 30 * 24 * 60 * 60 * 1000,
   keys: [config.cookieKey]
   })
@@ -42,14 +47,11 @@ mongoose.connect(dburl)
 require('./routes/authroutes')(app);
 require('./routes/home')(app);
 require('./routes/new')(app);
-require('./routes/update')(app);
 require('./routes/updatename')(app);
 require('./routes/delete')(app);
 require('./routes/allnodes')(app);
 require('./routes/usernodes')(app);
 require('./routes/usernodes')(app);
-require('./routes/select')(app);
-require('./routes/selected')(app);
 
 if(process.env.NODE_ENV === "production") {
   //express will serve up production assets
