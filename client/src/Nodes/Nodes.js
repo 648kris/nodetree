@@ -36,8 +36,7 @@ class NestedList extends React.Component {
   render() {
 
     let stations = [
-      {name:'kristen', _id:'000', leaves:[1,2,3]},
-      {name:'jacob', _id:'001', leaves:[1,2,3]}
+      {name:'', _id:'000', leaves:[]},
     ];
 
     if(this.props.allnodes){

@@ -60,7 +60,7 @@ componentWillReceiveProps(nextProps) {
     return (
       <div>
       <Appbar/>
-      <div style={{width:"50%"}}>
+      <div style={{width:"400px"}}>
       <List
         component="nav"
         subheader={<ListSubheader component="div">user generated factories</ListSubheader>}
