@@ -17,6 +17,13 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import treeIcon from '../icons/treeSmall.png';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 const styles = theme => ({
@@ -32,8 +39,8 @@ class YourNodes extends React.Component {
   componentWillReceiveProps(nextProps) {
      if (nextProps.auth !== this.props.auth) {
        let a = nextProps.auth;
-       console.log(a)
         this.props.fetchUserNodes(a)
+        this.props.selected(a);
        this.setState({
          yourNodeDis: "block",
          currentUser: nextProps.auth
@@ -45,6 +52,11 @@ class YourNodes extends React.Component {
         userNodes: nextProps.usernodes
        });
       }
+      if (nextProps.selected !== this.props.selected) {
+        this.setState({
+          selected: nextProps.selected
+         });
+        }
     if (nextProps.allnodes !== this.props.allnodes) {
       this.setState({
         allNodes: nextProps.allnodes
@@ -54,7 +66,75 @@ class YourNodes extends React.Component {
 
   state = {
     userNodes: [{name:'placeholder', _id:'000', leaves:[1,2,3]},],
+    selected: "",
+    currentUser: "",
+    deleteOpen: false,
+    changeNameOpen: false,
+    deleteBG: "white",
+    changeNameBG: "white",
+    changeNameCursor: "contextMenu",
+    deleteCursor: "contextMenu",
+    name:""
    };
+
+   handleSelect = (e) => {
+     this.setState({selected: e.target.id})
+   }
+
+   handleClickChangeNameOpen = (e) => {
+     this.setState({ changeNameOpen: true, selected: e.target.id });
+   };
+
+   handleChangeNameClose = () => {
+     this.setState({ changeNameOpen: false });
+   };
+
+
+ handleClickDeleteOpen = (e) => {
+   this.setState({ deleteOpen: true, selected: e.target.id });
+ };
+
+ handleDeleteClose = () => {
+   this.setState({ deleteOpen: false });
+ };
+
+ handleDeleteMouseOver = () => {
+   this.setState({ deleteBG: "#e0e0e0" });
+ };
+
+ handleDeleteMouseOut = () => {
+   this.setState({ deleteBG: "white" });
+ };
+
+ updateAfterNew = () => {
+   let auth = this.props.auth
+   this.props.fetchAllNodes()
+   this.props.fetchUserNodes(auth);
+   this.handleDeleteClose()
+ }
+
+ handleDelete = () => {
+   console.log("delete")
+   let nodeid = this.state.selected
+   console.log(nodeid)
+   this.props.deleteNode(nodeid)
+   setTimeout(this.updateAfterNew, 500);
+ };
+
+ handleChangeNameMouseOver = () => {
+   this.setState({ changeNameBG: "#e0e0e0", changeNameCursor: "pointer"});
+ };
+
+ handleChangeNameMouseOut = () => {
+   this.setState({ changeNameBG: "white",  deleteCursor: "pointer"});
+ };
+
+ handleNameChange = (e) => {
+   let n = e.target.value
+   this.setState({
+     name: "n"
+   })
+ }
 
   render() {
 
@@ -63,9 +143,6 @@ class YourNodes extends React.Component {
       {name:'jacob', _id:'001', leaves:[1,2,3]}
     ];
 
-
-
-    console.log(this.props)
 
     return (
       <Drawer
@@ -85,13 +162,85 @@ class YourNodes extends React.Component {
             <ListItemText primary={station.name} />
             </ListItem>
 
-            <div style={{float:"left", paddingLeft:"50px"}}>
-              <ChangeNameDialog id={station._id}/>
+            <div style={{float:"left", paddingLeft:"50px", padding:"10px"}}>
+            <button onClick={this.handleSelect} style={{border: "none", backgroundColor: this.state.changeNameBG, fontWeight:"bold", fontFamily:"Roboto",
+              padding:"7px", cursor: this.state.changeNameCursor }}
+              id={station._id} onClick={this.handleClickChangeNameOpen}
+              onMouseOver={this.handleChangeNameMouseOver} onMouseOut={this.handleChangeNameMouseOut}>
+              CHANGE NAME
+            </button>
             </div>
-            <div style={{float:"left", paddingRight:"50px"}} onClick={this.props.select("test")}>
-              <DeleteDialog id={station._id}/>
+            <div style={{float:"left", paddingRight:"50px", padding:"10px"}}>
+            <button onClick={this.handleSelect} style={{border: "none", backgroundColor: this.state.deleteBG, fontWeight:"bold", fontFamily:"Roboto",
+              color:"red", padding:"7px", cursor: this.state.deleteCursor }}
+              id={station._id} onClick={this.handleClickDeleteOpen}
+              onMouseOver={this.handleDeleteMouseOver} onMouseOut={this.handleDeleteMouseOut}>
+              DELETE
+            </button>
             </div>
           </List>
+
+
+          <div>
+            <Dialog
+              open={this.state.deleteOpen}
+              onClose={this.handleDeleteClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Delete Factory</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Delete the selected factory?
+                </DialogContentText>
+
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleDeleteClose}>
+                  Cancel
+                </Button>
+                <Button onClick={this.handleDelete} color="secondary">
+                  Delete
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+
+
+          <div>
+
+            <Dialog
+              open={this.state.changeNameOpen}
+              onClose={this.handleChangeNameClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Change Factory Name</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Change the name of selected factory. The factory's child nodes will remain unchanged.
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="New Name"
+                  fullWidth
+                  onChange={this.handleNameChange}
+                />
+
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleChangeNameClose}>
+                  Cancel
+                </Button>
+                <Button onClick={this.handleChangeNameClose} color="primary">
+                  Change Name
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+
+
+
           </div>
         ))}
       </Drawer>

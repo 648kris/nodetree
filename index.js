@@ -47,6 +47,9 @@ require('./routes/updatename')(app);
 require('./routes/delete')(app);
 require('./routes/allnodes')(app);
 require('./routes/usernodes')(app);
+require('./routes/usernodes')(app);
+require('./routes/select')(app);
+require('./routes/selected')(app);
 
 if(process.env.NODE_ENV === "production") {
   //express will serve up production assets

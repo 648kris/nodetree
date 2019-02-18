@@ -8,5 +8,5 @@ export default combineReducers({
   auth: authReducer,
   allnodes: nodesReducer,
   usernodes: userNodesReducer,
-  selected: selectedReducer
+  selected: selectedReducer,
 })

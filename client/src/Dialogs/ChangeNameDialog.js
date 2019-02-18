@@ -22,10 +22,12 @@ class FormDialog extends React.Component {
     this.setState({ open: false });
   };
 
+
+
   render() {
     return (
       <div>
-        <Button onClick={this.handleClickOpen}>
+        <Button onMouseOver={this.handleChildClick} onClick={this.handleClickOpen}>
           Change Name
         </Button>
         <Dialog

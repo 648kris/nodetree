@@ -3,21 +3,22 @@ const mongoose = require('mongoose');
 const Branch = mongoose.model('branch');
 
 module.exports = (app) => {
-  app.delete('/api/delete/', (req, res) => {
+
+  app.post('/api/delete/', (req, res) => {
+      console.log("api/delete")
     const id = req.query.nodeid;
     const user = req.query.user;
+    console.log(id)
 
-    if(req.session.isChanged){
-      res.send("You need to login to do that!")
-    }
+/*Branch.deleteOne({ id:id }, (err)=>{
+  if(err){res.send(err)}
+  res.send("done")
+})*/
 
-    else{
-      Branch.findOneAndDelete(
-        {_id: id, user: user}, (err, data) => {
-          if(err){res.send(err)}
-          res.sendStatus(200)
-      })
-    }
+Branch.remove({ _id: id }, function(err) {
+    if (err) {res.send(err)}
+    res.send("done")
+});
 
   })
 }

@@ -8,6 +8,7 @@ import { NEW_NODE} from './types';
 import { CHANGE_NODE_NAME } from './types';
 import { DELETE_NODE } from './types';
 import { SELECT } from './types';
+import { SELECTED } from './types';
 
 export const fetchUser = () => {
   return function(dispatch) {
@@ -35,22 +36,32 @@ export const fetchUserNodes = (currentuser) => {
   }
 };
 
-export const deleteNode = (currentuser, nodeid) => {
+export const deleteNode = (nodeid) => {
+  console.log("deletenode action")
   return function(dispatch) {
     axios
-      .delete(path() + '/api/delete',  {withCredentials: true}, {user: currentuser, nodeid: nodeid})
+      .post(path() + '/api/delete',  {withCredentials: true}, {params:{nodeid: nodeid}})
       .then(res => dispatch({type: DELETE_NODE, payload: res.data}))
   }
 };
 
-export const select = (id) => {
-  //console.log("actions select "+id)
+export const select = (userid, nodeid) => {
+  console.log("select action")
   return function(dispatch) {
-    dispatch({type: SELECT, payload: id})
+    axios
+      .post(path() + '/api/select',  {withCredentials: true}, {params:{userId: userid, selected: nodeid}})
+      .then(res => dispatch({type: SELECT, payload: res.data}))
   }
 };
 
-
+export const selected = (user) => {
+  console.log("selectED action")
+  return function(dispatch) {
+    axios
+      .get(path() + '/api/selected',  {withCredentials: true}, {user: user})
+      .then(res => dispatch({type: SELECTED, payload: res.data}))
+  }
+};
 
 
 export const changeNodeName = (currentuser, nodeid, name) => {

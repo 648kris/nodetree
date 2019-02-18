@@ -10,7 +10,6 @@ class App extends Component {
     this.props.fetchUser();
     this.props.fetchAllNodes();
     this.props.fetchUserNodes();
-    this.props.select();
   }
   render() {
     return (

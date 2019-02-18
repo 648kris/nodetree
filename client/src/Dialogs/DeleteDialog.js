@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+
 class FormDialog extends React.Component {
   state = {
     open: false,
@@ -21,10 +22,11 @@ class FormDialog extends React.Component {
     this.setState({ open: false });
   };
 
+
   render() {
     return (
       <div>
-        <Button color="secondary" onClick={this.handleClickOpen}>
+        <Button color="secondary" onClick={this.handleClickOpen} onMouseOver={this.handleChildClick}>
           Delete
         </Button>
         <Dialog

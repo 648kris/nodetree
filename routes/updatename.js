@@ -8,11 +8,7 @@ module.exports = (app) => {
     const name = req.query.name;
     const id = req.query.nodeid;
 
-    if(req.session.isChanged){
-      res.send("You need to login to do that!")
-    }
 
-    else{
       Branch.findOneAndUpdate(
         {_id: id},
         { $set: {name: name} },
@@ -20,7 +16,7 @@ module.exports = (app) => {
           if(err){res.send(err)}
           res.sendStatus(200)
         })
-    }
+  
 
   })
 }
