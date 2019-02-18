@@ -167,6 +167,8 @@ class YourNodes extends React.Component {
             </button>
             </div>
           </List>
+          </div>
+          ))}
 
           <div>
             <Dialog
@@ -223,8 +225,8 @@ class YourNodes extends React.Component {
               </DialogActions>
             </Dialog>
           </div>
-          </div>
-        ))}
+          
+        
       </Drawer>
     );
   }

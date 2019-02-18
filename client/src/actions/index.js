@@ -48,20 +48,29 @@ export const changeNodeName = (nodeid, name) => {
 };
 
 export const createNewNode = (name, amount, rangeLow, rangeHigh, currentuser) => {
+
   if ( isNaN(parseInt(rangeLow)) ){rangeLow = 1}
   if ( isNaN(parseInt(rangeHigh)) ){rangeHigh = 100}
   if ( isNaN(parseInt(amount)) ){amount = 5}
 
-  if (rangeLow < 1){rangeLow = 1}
-  if ( rangeHigh > Math.pow(10,30) ){Math.pow(10,30)}
-  if (amount < 1){amount = 1}
-  if (amount > 15){amount = 15}
-  if(rangeLow > rangeHigh){rangeHigh = rangeLow+1}
+  rangeLow = parseInt(rangeLow);
+  rangeHigh = parseInt(rangeHigh);
+
+  if (rangeLow < 1){rangeLow = 1; console.log("error")}
+  if ( rangeHigh > Math.pow(10,30) ){Math.pow(10,30); console.log("error")}
+  if (amount < 1){amount = 1; console.log("error")}
+  if (amount > 15){amount = 15; console.log("error")}
+  if(rangeLow > rangeHigh){rangeHigh = rangeLow+1; console.log("error")}
   let leaves = [];
+  let randomNum = 0;
   for(let i=0;i<amount;i++){
-    let x = Math.random() * (rangeHigh - rangeLow) + rangeLow;
-    let y = Math.round(x)
-    leaves.push(y)
+    randomNum = 0;
+    randomNum = Math.floor(Math.random() * (rangeHigh- rangeLow + 1));
+    console.log(randomNum)
+    console.log(rangeLow)
+    randomNum = randomNum + rangeLow; 
+    console.log(randomNum)
+    leaves.push(randomNum)
   }
   return function(dispatch) {
     axios

@@ -25,7 +25,7 @@ passport.use(new GoogleStrategy({
   console.log(accessToken)
     User.findOne({ googleId: profile.id }).then((existingUser) => {
       if(existingUser){ done(null, existingUser)}
-      else{ new User({googleId: profile.id}).save(); res.cookie('cookieName', 'cookieValue', {key:"testvalue"})
+      else{ new User({googleId: profile.id}).save()
       .then(user => done(null, user))}
     })
   }
